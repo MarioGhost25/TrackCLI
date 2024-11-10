@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid'
 import pc from 'picocolors'
 
 const filePath = './task.json'; //conexion to the json file 
-const copyPath = './archivo.json';
 
 //Method to read tasks
 async function readTasks() {
@@ -111,12 +110,10 @@ async function listTasks(status) {
                 filteredTasks = tasks.filter(task => task.status === "not-done")
                 console.log(filteredTasks)
                 break;
-            case "":
+            case " ":
                 filteredTasks.length === 0 ? 
-                console.log(pc.magenta("We recommend you to add some tasks")): 
-                filteredTasks.forEach(task => {
-                    console.log(`${task.id}. ${task.description} [${task.completed ? pc.green + "Done" : task.inProgress ? pc.yellow + "In-progress" : pc.red + "To-do"}`);
-                });
+                console.log(pc.magenta("We recommend you to add some tasks")): console.log(filteredTasks);
+                break;
             default:
                console.log(pc.whiteBright("Invalidated Status, Use 'done', 'not-done' or 'in-progress'"))
          }
@@ -128,14 +125,65 @@ async function listTasks(status) {
 }
 
 
+const args = process.argv.slice(2);
+if (args.includes("add")) {
+  const taskDescription = args.slice(1).join(" ");
+  if (!taskDescription) {
+    console.log(`Please provide a task description.`);
+    console.log(`Sample: node index.js add "Drink Water"`);
+  } else {
+    addTask(taskDescription);
+  }
+} else if (args.includes("list")) {
+  const status = args[1]; // "done", "to-do", "in-progress" (optional)
+  listTasks(status || " ");
+} else if (args.includes("update")) {
+  const id = args[1];
+  const newDescription = args.slice(2).join(" ");
+  if (!id || !newDescription) {
+    console.log(`Please provide a task ID and new description.`);
+    console.log(`Sample: node index.js update 1 "Updated task description"`);
+  } else {
+    updateTaskStatus(id, newDescription);
+  }
+} else if (args.includes("delete")) {
+    const id = args[1];
+    if (!id) {
+      console.log(`Please provide a task ID.`);
+      console.log(`Sample: node index.js delete 1`);
+    } else {
+      deleteTask(id);
+    }
+//   } else if (args.includes("mark-in-progress")) {
+//     const id = args[1];
+//     if (!id) {
+//       console.log(`Please provide a task ID.`);
+//       console.log(`Sample: node index.js mark-in-progress 1`);
+//     } else {
+//       markInProgress(id);
+//     }
+//   } else if (args.includes("mark-done")) {
+//     const id = args[1];
+//     if (!id) {
+//       console.log(`Please provide a task ID.`);
+//       console.log(`Sample: node index.js mark-done 1`);
+//     } else {
+//       markDone(id);
+//     }
+}else {
+    console.log(pc.cyan(`Usage: node index.js <command> [arguments]`));
+    console.log(pc.cyan(`Commands:`));
+    console.log(pc.cyan(` add <task description>            - Add a new task`));
+    console.log(pc.cyan(` list [status]                     - List tasks (status: done, to-do, in-progress)`));
+    console.log(pc.cyan(` update <id> <new description>     - Update a task by ID`));
+    console.log(pc.cyan(` delete <id>                       - Delete a task by ID`));
+    // console.log(pc.cyan(` mark-in-progress <id>             - Mark a task as in-progress by ID`));
+    // console.log(pc.cyan(` mark-done <id>                    - Mark a task as done by ID`));
+  }
 
-//listTasks('')
-//updateTaskStatus("888b6c4f-b831-407c-baa6-fcdd12051922", "not-done")
-//deleteTask("cd65daa7-4d59-4f08-a0eb-b0ceab536b97")
-/*readTasks()
-    .then(tasks => console.log(tasks))
-    .catch(error => console.error('Error al leer las tareas:', error));*/
 
-//addTask('aprendiendo nodes')
+
+
+
 
 
