@@ -1,5 +1,7 @@
 # TrackCLI
 
+Sample solution for the [task-tracker](https://roadmap.sh/projects/task-tracker) challenge from [roadmap.sh](https://roadmap.sh/).
+
 A simple Command Line Interface (CLI) for managing tasks. You can add, delete, and list tasks based on their status (e.g., done, in-progress). This project is built in Node.js without any additional libraries (other than uuid for unique task IDs).
 
 ## Table of Contents
